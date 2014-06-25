@@ -1,0 +1,19 @@
+#board-container{
+  width: 450px;
+  height: 450px;
+  border: 3px solid #000;
+  border-radius: 4px;  
+}
+
+.cell{
+  border: 1px solid #000;
+  font-weight: bold;
+  width: 50px;
+  height: 50px;
+  &.revealed{
+    color: #000;
+  }
+  &.guessed{
+    color: #4E5BA3;
+  }
+}
