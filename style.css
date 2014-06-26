@@ -25,10 +25,23 @@
   overflow: hidden; }
   .cell.revealed {
     color: #000; }
-  .cell.guessed {
+  .cell.guessed input {
     color: #4E5BA3; }
-  .cell p {
-    margin: 13px auto;
+    .cell.guessed input:focus {
+      border: 2px solid lawngreen; }
+  .cell input {
+    margin: 0 auto;
     font-size: 24px;
     line-height: 24px;
-    text-align: center; }
+    text-align: center;
+    height: 48px;
+    width: 48px; }
+    .cell input:focus {
+      border: 2px solid blue; }
+
+.update-cell {
+  height: 48px;
+  width: 48px;
+  border: none;
+  text-align: center;
+  font-size: 24px; }
