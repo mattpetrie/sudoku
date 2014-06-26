@@ -68,6 +68,54 @@
     };
   };
 
+  Board.prototype.full = function() {
+    var flatBoard = _.flatten(this.grid);
+    var allValues = _.map(flatBoard, function(square){
+      return square.curValue;
+    });
+    return allValues.indexOf("") === -1;
+  }
+
+  Board.prototype.check = function(array){
+    for(var i = 0; i < array.length; i++){
+      var values = "";
+      if(_.find(array[i], function(square){
+        return square.curValue !== square.winningValue;
+      })){
+        return false;
+      }
+    };
+    return true;
+  };
+
+  Board.prototype.checkRows = function(){
+    return this.check(this.grid);
+  };
+
+  Board.prototype.checkColumns = function(){
+    var transposedGrid = _.zip.apply(_, this.grid);
+    return this.check(transposedGrid);
+  };
+
+  Board.prototype.checkGroups = function(){
+    var groups = [];
+    for(var i = 0; i <= 6; i += 3){
+      var rows = this.grid.slice(i, i+3);
+      for(var j = 0; j <= 6; j += 3){
+        var group = [];
+        _.each(rows, function(row){
+          group = group.concat(row.slice(j, j+3));
+        });
+        groups.push(group);
+      };
+    };
+    return this.check(groups);
+  };
+
+  Board.prototype.won = function(){
+    return this.checkRows() && this.checkColumns() && this.checkGroups();
+  };
+
   var Square = Sudoku.Square = function(curValue, winningValue, revealed){
     this.curValue = curValue;
     this.winningValue = winningValue;

@@ -9,7 +9,9 @@
   border: 3px solid #000;
   border-radius: 4px;
   .row:nth-of-type(3), .row:nth-of-type(6){
-    border-bottom: 3px solid #000;
+    .cell{
+      border-bottom: 3px solid #000;
+    }
   }
 }
 
