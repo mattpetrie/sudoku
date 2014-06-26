@@ -1,15 +1,34 @@
+* {
+  box-sizing: border-box; }
+
 #board-container {
   width: 450px;
   height: 450px;
+  box-sizing: content-box;
   border: 3px solid #000;
   border-radius: 4px; }
+  #board-container .row:nth-of-type(3), #board-container .row:nth-of-type(6) {
+    border-bottom: 3px solid #000; }
+
+.row {
+  width: 450px;
+  height: 50px; }
+  .row .cell:nth-of-type(3), .row .cell:nth-of-type(6) {
+    border-right: 3px solid #000; }
 
 .cell {
   border: 1px solid #000;
   font-weight: bold;
   width: 50px;
-  height: 50px; }
+  height: 50px;
+  display: inline-block;
+  overflow: hidden; }
   .cell.revealed {
     color: #000; }
   .cell.guessed {
     color: #4E5BA3; }
+  .cell p {
+    margin: 13px auto;
+    font-size: 24px;
+    line-height: 24px;
+    text-align: center; }
