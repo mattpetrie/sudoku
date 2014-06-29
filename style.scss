@@ -2,15 +2,35 @@
   box-sizing: border-box;
 }
 
+body{
+  background-color: #111;
+  margin-top: 0px;
+}
+
+header{
+  background-color: rgba(255,255,255,0.2);
+  padding: 20px;
+  margin-bottom: 40px;
+}
+
+h1{
+  color: #fff;
+  font-family: "Montserrat", sans-serif;
+  font-weight: normal;
+  text-align: center;
+  margin: 0;
+}
+
 #board-container{
   width: 450px;
   height: 450px;
   box-sizing: content-box;
-  border: 3px solid #000;
+  border: 3px solid #FFF;
   border-radius: 4px;
+  margin: 0 auto;
   .row:nth-of-type(3), .row:nth-of-type(6){
     .cell{
-      border-bottom: 3px solid #000;
+      border-bottom: 3px solid #FFF;
     }
   }
 }
@@ -19,45 +39,53 @@
   width: 450px;
   height: 50px;
   .cell:nth-of-type(3), .cell:nth-of-type(6){
-    border-right: 3px solid #000;
+    border-right: 3px solid #FFF;
+  }
+  &:nth-of-type(n+1):nth-of-type(-n+3), &:nth-of-type(n+7):nth-of-type(-n+9){
+    .cell:nth-of-type(n+4):nth-of-type(-n+6) input{
+      background-color: #333;
+    }
+  }
+  &:nth-of-type(n+4):nth-of-type(-n+6){
+    .cell:nth-of-type(n+1):nth-of-type(-n+3) input, .cell:nth-of-type(n+7):nth-of-type(-n+9) input{
+      background-color: #333;
+    }
   }
 }
 
 .cell{
-  border: 1px solid #000;
+  border: 1px solid #CCC;
   font-weight: bold;
   width: 50px;
   height: 50px;
   display: inline-block;
   overflow: hidden;
   &.revealed{
-    color: #000;
+    input{
+      color: #FFF;
+    }
   }
   &.guessed{
     input{
       color: #4E5BA3;
       &:focus{
-        border: 2px solid lawngreen;
+        background-color: #B9EDBC !important;
       }
     }
   }
   input{
     margin: 0 auto;
+    font-family: "Muli", sans-serif;
     font-size: 24px;
     line-height: 24px;
     text-align: center;
-    height: 48px;
-    width: 48px;
+    height: 50px;
+    width: 50px;
+    border: none;
+    background-color: #777;
+    transition: 0.3s all ease-in-out;
     &:focus{
-      border: 2px solid blue;
+      background-color: #9BD5F2 !important;
     }
   }
-}
-
-.update-cell{
-  height: 48px;
-  width: 48px;
-  border: none;
-  text-align: center;
-  font-size: 24px;
 }

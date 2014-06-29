@@ -173,13 +173,18 @@ $(document).ready(function(){
     editCell(event.target);
   });
 
-  $('div.guessed').delegate('input', 'blur', function(event){
+  $('#board-container').delegate('div.guessed input', 'blur', function(event){
     event.preventDefault();
     var $target = $(event.target);
     var id = $target.parent().data('id').toString();
     var value = $target.val();
     S.updateCell(id, value, $target);
   });
+
+  $('#board-container').delegate('div.revealed input', 'focus', function(event){
+    $target = $(event.target);
+    $target.val($target.val());
+  })
 
   $(document).keydown(function(e){
     var $focus = $(':focus');
