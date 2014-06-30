@@ -2,8 +2,8 @@
   box-sizing: border-box; }
 
 body {
-  background-color: #111;
-  margin-top: 0px; }
+  background-color: #444;
+  margin: 0; }
 
 header {
   background-color: rgba(255, 255, 255, 0.2);
@@ -47,7 +47,7 @@ h1 {
   .cell.revealed input {
     color: #FFF; }
   .cell.guessed input {
-    color: #4E5BA3; }
+    color: #6FACDE; }
     .cell.guessed input:focus {
       background-color: #B9EDBC !important; }
   .cell input {

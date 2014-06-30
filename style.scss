@@ -3,8 +3,8 @@
 }
 
 body{
-  background-color: #111;
-  margin-top: 0px;
+  background-color: #444;
+  margin: 0;
 }
 
 header{
@@ -67,7 +67,7 @@ h1{
   }
   &.guessed{
     input{
-      color: #4E5BA3;
+      color: #6FACDE;
       &:focus{
         background-color: #B9EDBC !important;
       }
