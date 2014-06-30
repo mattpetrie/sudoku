@@ -82,6 +82,9 @@ h1{
   &.highlighted{
     background-color: #B9EDBC !important;
   }
+  &.conflict{
+    background-color: #D9627F !important;
+  }
 }
 
 #button-container{

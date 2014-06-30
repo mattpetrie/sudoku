@@ -79,6 +79,7 @@ var SHOWN = Sudoku.SHOWN = [
 
   // temporary board generator function just to populate with numbers
   Board.prototype.populate = function(){
+    var value, revealed, pos;
     var masterBoard = [];
     for(var i = 0; i < 9; i++){
       masterBoard.push(_.zip(MASTERROWS[i], SHOWN[i]));
@@ -86,12 +87,13 @@ var SHOWN = Sudoku.SHOWN = [
 
     for(var i = 0; i < 9; i++){
       for(var j = 0; j < 9; j++){
-        var value = masterBoard[i][j][0];
-        var revealed = masterBoard[i][j][1];
+        value = masterBoard[i][j][0];
+        revealed = masterBoard[i][j][1];
+        pos = [i,j]; 
         if(revealed){
-          this.setCoord([i,j], new Square(value, value, revealed));
+          this.setCoord([i,j], new Square(value, value, revealed, pos));
         } else{
-          this.setCoord([i,j], new Square("", value, revealed));
+          this.setCoord([i,j], new Square("", value, revealed, pos));
         };
       };
     };
@@ -114,6 +116,85 @@ var SHOWN = Sudoku.SHOWN = [
         }
       }
     }
+    this.findRowConflicts();
+    this.findColumnConflicts();
+    this.findGroupConflicts();
+  };
+
+  Board.prototype.findRowConflicts = function(){
+    var valueMap, value;
+    for(var i = 0; i < this.grid.length; i++){
+      valueMap = {}
+      for(var j = 0; j < this.grid[i].length; j++){
+        value = this.getCoord([i,j]).curValue;
+        if(valueMap[value]){
+          valueMap[value].push([i,j]);
+        } else {
+          valueMap[value] = [[i,j]];
+        }
+      }
+      this.flagConflicts(valueMap);
+    }
+  };
+
+  Board.prototype.findColumnConflicts = function(){
+    var valueMap, value;
+    for(var i = 0; i < this.grid.length; i++){
+      valueMap = {}
+      for(var j = 0; j < this.grid[i].length; j++){
+        value = this.getCoord([j,i]).curValue;
+        if(valueMap[value]){
+          valueMap[value].push([j,i]);
+        } else {
+          valueMap[value] = [[j,i]];
+        }
+      }
+      this.flagConflicts(valueMap);
+    }
+  };
+
+  Board.prototype.findGroupConflicts = function(){
+    var valueMap, value;
+    var groups = this.groups();
+    for(var i = 0; i < groups.length; i++){
+      valueMap = {}
+      for(var j = 0; j < groups[i].length; j++){
+        value = groups[i][j].curValue;
+        if(valueMap[value]){
+          valueMap[value].push(groups[i][j].pos);
+        } else {
+          valueMap[value] = [groups[i][j].pos];
+        }
+      }
+      this.flagConflicts(valueMap);
+    }
+  };
+
+  Board.prototype.flagConflicts = function(valueMap){
+    var conflicts =  []
+    _.each(Object.keys(valueMap), function(key){
+      if(key !== "" && valueMap[key].length > 1){
+        conflicts = conflicts.concat(valueMap[key]);
+      }
+    });
+    _.each(conflicts, function(conflict){
+      return $('div').find('[data-id="' + conflict[0] + conflict[1] + '"]').addClass('conflict');
+    });
+  };
+
+  Board.prototype.groups = function(){
+    var groups = [];
+    for(var i = 0; i <= 6; i += 3){
+      var rows = this.grid.slice(i, i+3);
+      for(var j = 0; j <= 6; j += 3){
+        var group = [];
+        _.each(rows, function(row){
+          group = group.concat(row.slice(j, j+3));
+        });
+        groups.push(group);
+      };
+    };
+    return groups;
   };
 
   Board.prototype.full = function() {
@@ -122,7 +203,7 @@ var SHOWN = Sudoku.SHOWN = [
       return square.curValue;
     });
     return allValues.indexOf("") === -1;
-  }
+  };
 
   Board.prototype.check = function(array){
     for(var i = 0; i < array.length; i++){
@@ -145,18 +226,7 @@ var SHOWN = Sudoku.SHOWN = [
   };
 
   Board.prototype.checkGroups = function(){
-    var groups = [];
-    for(var i = 0; i <= 6; i += 3){
-      var rows = this.grid.slice(i, i+3);
-      for(var j = 0; j <= 6; j += 3){
-        var group = [];
-        _.each(rows, function(row){
-          group = group.concat(row.slice(j, j+3));
-        });
-        groups.push(group);
-      };
-    };
-    return this.check(groups);
+    return this.check(this.groups());
   };
 
   Board.prototype.won = function(){
@@ -168,10 +238,11 @@ var SHOWN = Sudoku.SHOWN = [
     this.highlightCells();
   };
 
-  var Square = Sudoku.Square = function(curValue, winningValue, revealed){
+  var Square = Sudoku.Square = function(curValue, winningValue, revealed, pos){
     this.curValue = curValue;
     this.winningValue = winningValue;
     this.revealed = revealed;
+    this.pos = pos;
   };
 
 })();

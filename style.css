@@ -60,6 +60,8 @@ h1 {
     color: #6FACDE; }
   .cell.highlighted {
     background-color: #B9EDBC !important; }
+  .cell.conflict {
+    background-color: #D9627F !important; }
 
 #button-container {
   margin: 15px auto 0;
