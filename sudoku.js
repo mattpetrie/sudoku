@@ -32,6 +32,7 @@ var SHOWN = Sudoku.SHOWN = [
     this.populate();
     this.inputSquares = this.findInputSquares();
     this.selectedNumber = null;
+    this.delete = false;
   };
 
   Board.prototype.generateGrid = function(){
@@ -100,8 +101,15 @@ var SHOWN = Sudoku.SHOWN = [
   };
 
   Board.prototype.updateCell = function(id, target){
-    this.setCoord([id[0], id[1]], this.selectedNumber);
-    $(target).html(this.selectedNumber);
+    if(this.delete){
+      this.setCoord([id[0], id[1]], "");
+      $(target).html("").removeClass('highlighted');
+      this.findConflicts();
+    } else {
+      this.setCoord([id[0], id[1]], this.selectedNumber);
+      $(target).html(this.selectedNumber).addClass('highlighted');
+    }
+
     if(this.full() && this.won()){
       alert('You won!');
     }
@@ -116,6 +124,10 @@ var SHOWN = Sudoku.SHOWN = [
         }
       }
     }
+  };
+
+  Board.prototype.findConflicts = function(){
+    $('.conflict').removeClass('conflict');
     this.findRowConflicts();
     this.findColumnConflicts();
     this.findGroupConflicts();
@@ -235,7 +247,14 @@ var SHOWN = Sudoku.SHOWN = [
 
   Board.prototype.selectButton = function(target){
     this.selectedNumber = parseInt($(target).val());
+    if(this.delete){
+      this.toggleDelete();
+    }
     this.highlightCells();
+  };
+
+  Board.prototype.toggleDelete = function(){
+    this.delete ? this.delete = false : this.delete = true;
   };
 
   var Square = Sudoku.Square = function(curValue, winningValue, revealed, pos){
@@ -254,8 +273,18 @@ $(document).ready(function(){
 
   $('button.number-button').click(function(event){
     S.selectButton(event.target);
-    $('button.selected').removeClass('selected');
+    $('button').removeClass('selected');
     $(event.target).addClass('selected');
+  });
+
+  $('button#conflict-button').click(function(event){
+    S.findConflicts();
+  });
+
+  $('button#delete-button').click(function(event){
+    $(event.target).toggleClass('selected');
+    $('button.number-button').removeClass('selected');
+    S.toggleDelete();
   });
 
   $('#board-container').delegate('div.guessed', 'click', function(event){
