@@ -18,48 +18,66 @@ h1 {
   margin: 0; }
 
 #board-container {
-  width: 450px;
-  height: 450px;
+  width: 360px;
+  height: 360px;
   box-sizing: content-box;
-  border: 3px solid #FFF;
-  border-radius: 4px;
   margin: 0 auto; }
   #board-container .row:nth-of-type(3) .cell, #board-container .row:nth-of-type(6) .cell {
-    border-bottom: 3px solid #FFF; }
+    border-bottom: 3px solid #444; }
 
 .row {
-  width: 450px;
-  height: 50px; }
+  width: 360px;
+  height: 40px; }
   .row .cell:nth-of-type(3), .row .cell:nth-of-type(6) {
-    border-right: 3px solid #FFF; }
-  .row:nth-of-type(n+1):nth-of-type(-n+3) .cell:nth-of-type(n+4):nth-of-type(-n+6) input, .row:nth-of-type(n+7):nth-of-type(-n+9) .cell:nth-of-type(n+4):nth-of-type(-n+6) input {
+    border-right: 3px solid #444; }
+  .row:nth-of-type(n+1):nth-of-type(-n+3) .cell:nth-of-type(n+4):nth-of-type(-n+6), .row:nth-of-type(n+7):nth-of-type(-n+9) .cell:nth-of-type(n+4):nth-of-type(-n+6) {
     background-color: #333; }
-  .row:nth-of-type(n+4):nth-of-type(-n+6) .cell:nth-of-type(n+1):nth-of-type(-n+3) input, .row:nth-of-type(n+4):nth-of-type(-n+6) .cell:nth-of-type(n+7):nth-of-type(-n+9) input {
+  .row:nth-of-type(n+4):nth-of-type(-n+6) .cell:nth-of-type(n+1):nth-of-type(-n+3), .row:nth-of-type(n+4):nth-of-type(-n+6) .cell:nth-of-type(n+7):nth-of-type(-n+9) {
     background-color: #333; }
 
 .cell {
-  border: 1px solid #CCC;
+  border: 1px solid #444;
   font-weight: bold;
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   display: inline-block;
-  overflow: hidden; }
-  .cell.revealed input {
+  overflow: hidden;
+  margin: 0 auto;
+  font-family: "Muli", sans-serif;
+  font-size: 24px;
+  line-height: 24px;
+  text-align: center;
+  padding-top: 8px;
+  height: 40px;
+  width: 40px;
+  background-color: #888;
+  transition: 0.3s all ease-in-out; }
+  .cell:hover {
+    background-color: #999 !important; }
+  .cell.revealed {
     color: #FFF; }
-  .cell.guessed input {
+  .cell.guessed {
     color: #6FACDE; }
-    .cell.guessed input:focus {
-      background-color: #B9EDBC !important; }
-  .cell input {
-    margin: 0 auto;
-    font-family: "Muli", sans-serif;
-    font-size: 24px;
-    line-height: 24px;
-    text-align: center;
-    height: 50px;
+  .cell.highlighted {
+    background-color: #B9EDBC !important; }
+
+#button-container {
+  margin: 15px auto 0;
+  width: 216px; }
+  #button-container button {
     width: 50px;
+    height: 50px;
+    margin: 2px;
+    background-color: #333;
+    color: #FFF;
     border: none;
-    background-color: #777;
+    font-size: 24px;
+    font-family: "Muli", sans-serif;
     transition: 0.3s all ease-in-out; }
-    .cell input:focus {
-      background-color: #9BD5F2 !important; }
+    #button-container button.selected, #button-container button:focus {
+      border: 1px solid #B9EDBC;
+      outline: none; }
+    #button-container button:hover {
+      background-color: #666; }
+    #button-container button:active {
+      background-color: #666; }

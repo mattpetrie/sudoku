@@ -31,6 +31,7 @@ var SHOWN = Sudoku.SHOWN = [
     this.grid = this.generateGrid();
     this.populate();
     this.inputSquares = this.findInputSquares();
+    this.selectedNumber = null;
   };
 
   Board.prototype.generateGrid = function(){
@@ -68,9 +69,9 @@ var SHOWN = Sudoku.SHOWN = [
         var square = this.getCoord([i,j]);
         var cell = $('div').find('[data-id="' + i + j + '"]');
         if(square.revealed){
-          cell.append('<input type="text" maxlength="1" readonly value="' + square.curValue + '"/>').addClass('revealed');
+          cell.append(square.curValue).addClass('revealed');
         } else{
-          cell.append('<input type="text" maxlength="1">').addClass('guessed');
+          cell.addClass('guessed');
         }
       };
     };
@@ -96,15 +97,22 @@ var SHOWN = Sudoku.SHOWN = [
     };
   };
 
-  Board.prototype.updateCell = function(id, value, $target){
-    if(DIGITS.indexOf(value) >= 0){
-      this.setCoord([id[0], id[1]], parseInt(value));
-    } else {
-      value = this.getCoord([id[0], id[1]]).curValue;
-      $target.val(value);
-    };
+  Board.prototype.updateCell = function(id, target){
+    this.setCoord([id[0], id[1]], this.selectedNumber);
+    $(target).html(this.selectedNumber);
     if(this.full() && this.won()){
       alert('You won!');
+    }
+  };
+
+  Board.prototype.highlightCells = function(){
+    $('div.cell.highlighted').removeClass('highlighted');
+    for(var i = 0; i < this.grid.length; i++){
+      for(var j = 0; j < this.grid[i].length; j++){
+        if(this.getCoord([i,j]).curValue === this.selectedNumber){
+          $('div').find('[data-id="' + i + j + '"]').addClass('highlighted');
+        }
+      }
     }
   };
 
@@ -155,6 +163,11 @@ var SHOWN = Sudoku.SHOWN = [
     return this.checkRows() && this.checkColumns() && this.checkGroups();
   };
 
+  Board.prototype.selectButton = function(target){
+    this.selectedNumber = parseInt($(target).val());
+    this.highlightCells();
+  };
+
   var Square = Sudoku.Square = function(curValue, winningValue, revealed){
     this.curValue = curValue;
     this.winningValue = winningValue;
@@ -168,56 +181,14 @@ $(document).ready(function(){
   var $el = $('#board-container');
   S.render($el);
 
-  $('div.guessed').focus(function(event){
-    var data = $(event.target).data('id');
-    editCell(event.target);
+  $('button.number-button').click(function(event){
+    S.selectButton(event.target);
+    $('button.selected').removeClass('selected');
+    $(event.target).addClass('selected');
   });
 
-  $('#board-container').delegate('div.guessed input', 'blur', function(event){
-    event.preventDefault();
-    var $target = $(event.target);
-    var id = $target.parent().data('id').toString();
-    var value = $target.val();
-    S.updateCell(id, value, $target);
-  });
-
-  $('#board-container').delegate('div.revealed input', 'focus', function(event){
-    $target = $(event.target);
-    $target.val($target.val());
-  })
-
-  $(document).keydown(function(e){
-    var $focus = $(':focus');
-    
-    if(!$focus.is('.cell input')){
-      return;
-    } else {
-      var id = $focus.parent().data('id');
-    };
-
-    if (e.keyCode == 37) { 
-      $('div').find('[data-id="' + id + '"]').prev().find('input').focus();
-      return false;
-    }
-    if (e.keyCode == 38) { 
-      if(id > 10){
-        id = (parseInt(id) - 10).toString();
-        id = id < 10 ? ("0" + id) : id;
-      }
-      $('div').find('[data-id="' + id + '"]').find('input').focus();
-      return false;
-    }
-    if (e.keyCode == 39) { 
-      $('div').find('[data-id="' + id + '"]').next().find('input').focus();
-      return false;
-    }
-    if (e.keyCode == 40) { 
-      if(id < 80){
-        id = (parseInt(id) + 10).toString();
-      }
-      $('div').find('[data-id="' + id + '"]').find('input').focus();
-      return false;
-    }
-
+  $('#board-container').delegate('div.guessed', 'click', function(event){
+    var id = $(event.target).data('id').toString();
+    S.updateCell(id, event.target);
   });
 });
