@@ -79,9 +79,9 @@ h1 {
     .cell.conflict.guessed {
       color: #276e64; }
   .cell.incorrect {
-    background-color: #e3c75f; }
+    background-color: #eedea0; }
     .cell.incorrect:hover {
-      background-color: #ebd68a !important; }
+      background-color: #f6edcb !important; }
 
 #button-container {
   margin: 25px 0 0 25px;
@@ -127,4 +127,9 @@ h1 {
     margin: 0 auto; }
 
   #button-container {
-    margin-top: 25px; } }
+    margin-top: -30px;
+    transform: rotateX(180deg) rotateZ(270deg);
+    -webkit-transform: rotateX(180deg) rotateZ(270deg); }
+    #button-container button {
+      transform: rotateZ(270deg) rotateY(180deg);
+      -webkit-transform: rotateZ(270deg) rotateY(180deg); } }

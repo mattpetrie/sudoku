@@ -3,7 +3,7 @@ $cell-background-light: rgba(255,255,255,0.4);
 $cell-background-dark: rgba(0,0,0,0.5);
 $green: #68c07a;
 $red: #eb5174;
-$yellow: #e3c75f;
+$yellow: #eedea0;
 
 *{
   box-sizing: border-box;
@@ -149,7 +149,7 @@ h1{
         border: 5px solid lighten($red, 15%);
       }
       &#answer-button{
-        border: 5px solid lighten($yellow, 15%);
+        border: 5px solid $yellow;
       }
       &#delete-button{
         border: 5px solid #FFF;
@@ -174,6 +174,12 @@ h1{
     margin: 0 auto;
   }
   #button-container{
-    margin-top: 25px;
+    margin-top: -30px;
+    transform: rotateX(180deg) rotateZ(270deg);
+    -webkit-transform: rotateX(180deg) rotateZ(270deg);
+    button{
+      transform: rotateZ(270deg) rotateY(180deg);
+      -webkit-transform: rotateZ(270deg) rotateY(180deg);
+    }
   }
 }
