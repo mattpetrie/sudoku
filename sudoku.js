@@ -35,6 +35,7 @@ var SHOWN = Sudoku.SHOWN = [
     this.deleteMode = false;
     this.conflictMode = false;
     this.answerMode = false;
+    this.noteMode = false;
   };
 
   Board.prototype.generateGrid = function(){
@@ -59,22 +60,18 @@ var SHOWN = Sudoku.SHOWN = [
     }
   };
 
-  Board.prototype.getCoord = function(arr){
-    return this.grid[arr[0]][arr[1]];
-  };
-
   Board.prototype.render = function(el){
     for(var i = 0; i < this.grid.length; i++){
       $(el).append('<div class="row"></div>');
       var row = $(el).find('.row').last();
       for(var j = 0; j < 9; j++){
         row.append('<div class="cell" data-id="' + i + j + '"></div>');
-        var square = this.getCoord([i,j]);
+        var square = this.grid[i][j];
         var cell = $('div').find('[data-id="' + i + j + '"]');
         if(square.revealed){
           cell.append(square.curValue).addClass('revealed');
         } else{
-          cell.addClass('guessed');
+          cell.addClass('guessed').prepend('<div class="notes"></div>');
         }
       }
     }
@@ -105,8 +102,11 @@ var SHOWN = Sudoku.SHOWN = [
   Board.prototype.updateCell = function(id, target){
     if(this.deleteMode){
       this.setCoord([id[0], id[1]], '');
-      $(target).html("").removeClass('highlighted').removeClass('incorrect');
-    } else {
+      $(target).html("")
+        .removeClass('highlighted')
+        .removeClass('incorrect')
+        .prepend('<div class="notes"></div');
+    } else if(this.selectedNumber){
       this.setCoord([id[0], id[1]], this.selectedNumber);
       $(target).html(this.selectedNumber).addClass('highlighted');
     }
@@ -120,7 +120,7 @@ var SHOWN = Sudoku.SHOWN = [
     }
 
     if(this.won()){
-      alert('You won!');
+      $('#win').fadeIn();
     }
   };
 
@@ -128,7 +128,7 @@ var SHOWN = Sudoku.SHOWN = [
     $('div.cell.highlighted').removeClass('highlighted');
     for(var i = 0; i < this.grid.length; i++){
       for(var j = 0; j < this.grid[i].length; j++){
-        if(this.getCoord([i,j]).curValue === this.selectedNumber){
+        if(this.grid[i][j].curValue === this.selectedNumber){
           $('div').find('[data-id="' + i + j + '"]').addClass('highlighted');
         }
       }
@@ -199,7 +199,7 @@ var SHOWN = Sudoku.SHOWN = [
     _.each(flatBoard, function(square){
       if(square.curValue !== "" && square.curValue !== square.winningValue){
         var pos = square.pos;
-        return $('div').find('[data-id="' + pos[0] + pos[1] + '"]').addClass('incorrect');
+        return $('div').find('[data-id="' + pos[0] + pos[1] + '"]').removeClass('highlighted').addClass('incorrect');
       }
     });
   };
@@ -282,7 +282,28 @@ var SHOWN = Sudoku.SHOWN = [
   };
 
   Board.prototype.toggleDeleteMode = function(){
+    this.selectedNumber = null;
     this.deleteMode ? this.deleteMode = false : this.deleteMode = true;
+  };
+
+  Board.prototype.toggleNoteMode = function(){
+    if(this.noteMode){
+      this.noteMode = false;
+      $('.notes').css('z-index', '-2');
+    } else {
+      this.noteMode = true
+      $('.notes').css('z-index', '2');
+    }
+  };
+
+  Board.prototype.addNote = function(id, target){
+    var square = this.grid[id[0]][id[1]];
+    if(square.notes[this.selectedNumber]){
+      delete square.notes[this.selectedNumber]
+    } else {
+      square.notes[this.selectedNumber] = true;
+    }
+    $(target).html(Object.keys(square.notes).join(' '));
   };
 
   var Square = Sudoku.Square = function(curValue, winningValue, revealed, pos){
@@ -290,6 +311,7 @@ var SHOWN = Sudoku.SHOWN = [
     this.winningValue = winningValue;
     this.revealed = revealed;
     this.pos = pos;
+    this.notes = {};
   };
 
 })();
@@ -298,6 +320,12 @@ $(document).ready(function(){
   var S = window.S = new Sudoku.Board();
   var $el = $('#board-container');
   S.render($el);
+
+  $('button#notes-button').click(function(event){
+    $(event.target).toggleClass('selected');
+    $('button#delete-button').removeClass('selected');
+    S.toggleNoteMode();
+  });
 
   $('button.number-button').click(function(event){
     S.selectButton(event.target);
@@ -325,5 +353,10 @@ $(document).ready(function(){
   $('#board-container').delegate('div.guessed', 'click', function(event){
     var id = $(event.target).data('id').toString();
     S.updateCell(id, event.target);
-  });
+  }).delegate('div.notes', 'click', function(event){
+      event.stopPropagation();
+      var id = $(event.target).parent().data('id').toString();
+      S.addNote(id, event.target);
+    });
+
 });

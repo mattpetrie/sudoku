@@ -1,5 +1,7 @@
 * {
-  box-sizing: border-box; }
+  box-sizing: border-box;
+  font-family: "Muli", sans-serif;
+  font-weight: normal; }
 
 body {
   background-color: #66c8ba;
@@ -12,8 +14,6 @@ header {
 
 h1 {
   color: rgba(0, 0, 0, 0.3);
-  font-family: "Muli", sans-serif;
-  font-weight: normal;
   font-size: 40px;
   text-align: center;
   margin: 0; }
@@ -46,13 +46,13 @@ h1 {
       background-color: rgba(51, 51, 51, 0.5); }
 
 .cell {
+  position: relative;
   border: 1px solid #66c8ba;
   width: 50px;
   height: 50px;
   display: inline-block;
   overflow: hidden;
   margin: 0 auto;
-  font-family: "Muli", sans-serif;
   font-size: 30px;
   line-height: 30px;
   text-align: center;
@@ -83,8 +83,20 @@ h1 {
     .cell.incorrect:hover {
       background-color: #f6edcb !important; }
 
+.notes {
+  font-size: 16px;
+  line-height: 16px;
+  color: #888;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 1px;
+  z-index: -2; }
+
 #button-container {
-  margin: 25px 0 0 25px;
+  margin: -5px 0 0 25px;
   width: 300px;
   display: inline-block;
   vertical-align: top; }
@@ -96,10 +108,13 @@ h1 {
     background-color: #276e64;
     color: #FFF;
     border: 5px solid transparent;
+    border-radius: 10px;
     font-size: 30px;
     font-family: "Muli", sans-serif;
     transition: 0.3s all ease-in-out;
     -webkit-transition: 0.3s all ease-in-out; }
+    #button-container button::-moz-focus-inner {
+      border: 0; }
     #button-container button.selected {
       border: 5px solid #9ed7aa;
       transition: 0.3s all ease-in-out;
@@ -117,6 +132,28 @@ h1 {
       outline: none; }
     #button-container button:hover, #button-container button:active {
       background-color: #1a4841; }
+    #button-container button#notes-button {
+      width: 290px;
+      height: 50px; }
+      #button-container button#notes-button.selected {
+        border: 5px solid #FFF; }
+
+#win {
+  width: 100%;
+  position: fixed;
+  top: 40%;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.8);
+  display: none; }
+  #win form {
+    width: 150px;
+    margin: 0 auto; }
+    #win form input {
+      padding: 10px;
+      background-color: transparent;
+      border: 2px solid rgba(0, 0, 0, 0.3);
+      color: rgba(0, 0, 0, 0.3);
+      font-size: 24px; }
 
 @media (max-width: 780px) {
   #main-container {
@@ -130,9 +167,14 @@ h1 {
   #button-container {
     margin: 10px auto 0;
     width: 400px; }
+    #button-container:after {
+      content: "";
+      clear: both; }
     #button-container .button-row {
       position: relative;
       float: left; }
+    #button-container button#notes-button {
+      width: 390px; }
 
   #special-buttons {
     position: relative;
@@ -161,17 +203,22 @@ h1 {
     height: 35px;
     width: 35px; }
 
+  .notes {
+    font-size: 10px;
+    line-height: 10px; }
+
   #button-container {
-    width: 240px;
-    height: 180px; }
+    width: 192px;
+    height: 192px; }
     #button-container button {
-      width: 50px;
-      height: 50px; }
-    #button-container:after {
-      content: "";
-      clear: both; }
+      margin: 2px;
+      width: 44px;
+      height: 44px; }
+    #button-container button#notes-button {
+      width: 188px;
+      height: 40px; }
 
   #special-buttons {
-    margin-top: -120px;
-    height: 180px;
-    width: 60px; } }
+    margin-top: -96px;
+    height: 192px;
+    width: 48px; } }
