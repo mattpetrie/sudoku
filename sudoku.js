@@ -3,11 +3,6 @@
 
   var DIGITS = Sudoku.DIGITS = "123456789";
 
-  var boards = Sudoku.boards = {
-    1: [[5,3,4,6,7,8,9,1,2,6,7,2,1,9,5,3,4,8,1,9,8,3,4,2,5,6,7,8,5,9,7,6,1,4,2,3,4,2,6,8,5,3,7,9,1,7,1,3,9,2,4,8,5,6,9,6,1,5,3,7,2,8,4,2,8,7,4,1,9,6,3,5,3,4,5,2,8,6,1,7,9],
-        [5,3,0,0,7,0,0,0,0,6,0,0,1,9,5,0,0,0,0,9,8,0,0,0,0,6,0,8,0,0,0,6,0,0,0,3,4,0,0,8,0,3,0,0,1,7,0,0,0,2,0,0,0,6,0,6,0,0,0,0,2,8,0,0,0,0,4,1,9,0,0,5,0,0,0,0,8,0,0,7,9]],
-  };
-
   var Board = Sudoku.Board = function(difficulty){
     this.grid = this._generateGrid();
     this.populate(difficulty);
@@ -96,7 +91,7 @@
 
   Board.prototype.populate = function(idx){
     var value, revealed, pos;
-    var board = BOARDS[idx];
+    var board = window.BOARDS[idx];
     var x = 0;
     for(var i = 0; i < 9; i++){
       for(var j = 0; j < 9; j++){
@@ -295,12 +290,12 @@
 })();
 
 $(document).ready(function(){
-  $('#menu').click(function(){
+  $('.menu-buttons').click(function(event){
     var difficulty = $(event.target).val();
     var S = window.S = new Sudoku.Board(difficulty);
     var $el = $('#board-container');
-    $('#menu').fadeOut();
-    $('#main-container').delay(400).fadeIn();
+    $('#menu').hide();
+    $('#main-container').show();
     S.render($el);
   });
 
@@ -344,5 +339,4 @@ $(document).ready(function(){
       var id = $(event.target).parent().data('id').toString();
       S.addNote(id, event.target);
     });
-
 });
