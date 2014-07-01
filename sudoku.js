@@ -32,14 +32,15 @@ var SHOWN = Sudoku.SHOWN = [
     this.populate();
     this.inputSquares = this.findInputSquares();
     this.selectedNumber = null;
-    this.delete = false;
+    this.deleteMode = false;
+    this.conflictMode = false;
   };
 
   Board.prototype.generateGrid = function(){
     var grid = new Array(9);
     for(var i = 0; i < grid.length; i++){
       grid[i] = new Array(9);
-    };
+    }
     return grid;
   };
 
@@ -47,7 +48,7 @@ var SHOWN = Sudoku.SHOWN = [
     return _.filter((_.flatten(this.grid)), function(square){
       return square.revealed == 0;
     });
-  }
+  };
 
   Board.prototype.setCoord = function(arr, val){
     if(typeof this.grid[arr[0]][arr[1]] == "object"){
@@ -74,8 +75,8 @@ var SHOWN = Sudoku.SHOWN = [
         } else{
           cell.addClass('guessed');
         }
-      };
-    };
+      }
+    }
   };
 
   // temporary board generator function just to populate with numbers
@@ -84,7 +85,7 @@ var SHOWN = Sudoku.SHOWN = [
     var masterBoard = [];
     for(var i = 0; i < 9; i++){
       masterBoard.push(_.zip(MASTERROWS[i], SHOWN[i]));
-    };
+    }
 
     for(var i = 0; i < 9; i++){
       for(var j = 0; j < 9; j++){
@@ -95,22 +96,25 @@ var SHOWN = Sudoku.SHOWN = [
           this.setCoord([i,j], new Square(value, value, revealed, pos));
         } else{
           this.setCoord([i,j], new Square("", value, revealed, pos));
-        };
-      };
-    };
+        }
+      }
+    }
   };
 
   Board.prototype.updateCell = function(id, target){
-    if(this.delete){
-      this.setCoord([id[0], id[1]], "");
+    if(this.deleteMode){
+      this.setCoord([id[0], id[1]], '');
       $(target).html("").removeClass('highlighted');
-      this.findConflicts();
     } else {
       this.setCoord([id[0], id[1]], this.selectedNumber);
       $(target).html(this.selectedNumber).addClass('highlighted');
     }
 
-    if(this.full() && this.won()){
+    if(this.conflictMode){
+      this.findConflicts();
+    }
+
+    if(this.won()){
       alert('You won!');
     }
   };
@@ -134,52 +138,43 @@ var SHOWN = Sudoku.SHOWN = [
   };
 
   Board.prototype.findRowConflicts = function(){
-    var valueMap, value;
-    for(var i = 0; i < this.grid.length; i++){
-      valueMap = {}
-      for(var j = 0; j < this.grid[i].length; j++){
-        value = this.getCoord([i,j]).curValue;
-        if(valueMap[value]){
-          valueMap[value].push([i,j]);
-        } else {
-          valueMap[value] = [[i,j]];
-        }
-      }
+    var valueMaps = this._mapValues(this.grid);
+    _.each(valueMaps, function(valueMap){
       this.flagConflicts(valueMap);
-    }
+    }, this);
   };
 
   Board.prototype.findColumnConflicts = function(){
-    var valueMap, value;
-    for(var i = 0; i < this.grid.length; i++){
-      valueMap = {}
-      for(var j = 0; j < this.grid[i].length; j++){
-        value = this.getCoord([j,i]).curValue;
-        if(valueMap[value]){
-          valueMap[value].push([j,i]);
-        } else {
-          valueMap[value] = [[j,i]];
-        }
-      }
+    var transposedGrid = _.zip.apply(_, this.grid)
+    var valueMaps = this._mapValues(transposedGrid);
+    _.each(valueMaps, function(valueMap){
       this.flagConflicts(valueMap);
-    }
+    }, this);
   };
 
   Board.prototype.findGroupConflicts = function(){
+    var valueMaps = this._mapValues(this.groups());
+    _.each(valueMaps, function(valueMap){
+      this.flagConflicts(valueMap);
+    }, this);
+  };
+
+  Board.prototype._mapValues = function(grid){
     var valueMap, value;
-    var groups = this.groups();
-    for(var i = 0; i < groups.length; i++){
-      valueMap = {}
-      for(var j = 0; j < groups[i].length; j++){
-        value = groups[i][j].curValue;
+    var valueMaps = [];
+    for(var i = 0; i < grid.length; i++){
+      valueMap = {};
+      for(var j = 0; j < grid.length; j++){
+        value = grid[i][j].curValue;
         if(valueMap[value]){
-          valueMap[value].push(groups[i][j].pos);
+          valueMap[value].push(grid[i][j].pos);
         } else {
-          valueMap[value] = [groups[i][j].pos];
+          valueMap[value] = [grid[i][j].pos];
         }
       }
-      this.flagConflicts(valueMap);
+      valueMaps.push(valueMap);
     }
+    return valueMaps;
   };
 
   Board.prototype.flagConflicts = function(valueMap){
@@ -242,19 +237,28 @@ var SHOWN = Sudoku.SHOWN = [
   };
 
   Board.prototype.won = function(){
-    return this.checkRows() && this.checkColumns() && this.checkGroups();
+    return this.full() && this.checkRows() && this.checkColumns() && this.checkGroups();
   };
 
   Board.prototype.selectButton = function(target){
     this.selectedNumber = parseInt($(target).val());
-    if(this.delete){
-      this.toggleDelete();
+    if(this.deleteMode){
+      this.toggleDeleteMode();
     }
     this.highlightCells();
   };
 
-  Board.prototype.toggleDelete = function(){
-    this.delete ? this.delete = false : this.delete = true;
+  Board.prototype.toggleConflictMode = function(){
+    this.conflictMode ? this.conflictMode = false : this.conflictMode = true;
+    if(this.conflictMode){
+      this.findConflicts();
+    } else {
+      $('div.cell').removeClass('conflict');
+    }
+  };
+
+  Board.prototype.toggleDeleteMode = function(){
+    this.deleteMode ? this.deleteMode = false : this.deleteMode = true;
   };
 
   var Square = Sudoku.Square = function(curValue, winningValue, revealed, pos){
@@ -273,18 +277,20 @@ $(document).ready(function(){
 
   $('button.number-button').click(function(event){
     S.selectButton(event.target);
-    $('button').removeClass('selected');
+    $('button.number-button').removeClass('selected');
+    $('button#delete-button').removeClass('selected');
     $(event.target).addClass('selected');
   });
 
   $('button#conflict-button').click(function(event){
-    S.findConflicts();
+    $(event.target).toggleClass('selected');
+    S.toggleConflictMode();
   });
 
   $('button#delete-button').click(function(event){
     $(event.target).toggleClass('selected');
     $('button.number-button').removeClass('selected');
-    S.toggleDelete();
+    S.toggleDeleteMode();
   });
 
   $('#board-container').delegate('div.guessed', 'click', function(event){

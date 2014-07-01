@@ -12,75 +12,111 @@ header {
 
 h1 {
   color: rgba(0, 0, 0, 0.3);
-  font-family: "Montserrat", sans-serif;
+  font-family: "Muli", sans-serif;
   font-weight: normal;
+  font-size: 40px;
   text-align: center;
   margin: 0; }
 
-#board-container {
-  width: 360px;
-  height: 360px;
-  box-sizing: content-box;
+#main-container {
+  width: 780px;
   margin: 0 auto; }
+
+#board-container {
+  width: 450px;
+  height: 450px;
+  box-sizing: content-box;
+  margin: 0 auto;
+  display: inline-block; }
   #board-container .row:nth-of-type(3) .cell, #board-container .row:nth-of-type(6) .cell {
-    border-bottom: 3px solid #444; }
+    border-bottom: 3px solid #66c8ba; }
 
 .row {
-  width: 360px;
-  height: 40px; }
+  width: 100%;
+  height: 50px; }
   .row .cell:nth-of-type(3), .row .cell:nth-of-type(6) {
-    border-right: 3px solid #444; }
+    border-right: 3px solid #66c8ba; }
   .row:nth-of-type(n+1):nth-of-type(-n+3) .cell:nth-of-type(n+4):nth-of-type(-n+6), .row:nth-of-type(n+7):nth-of-type(-n+9) .cell:nth-of-type(n+4):nth-of-type(-n+6) {
-    background-color: #333; }
+    background-color: rgba(0, 0, 0, 0.5); }
+    .row:nth-of-type(n+1):nth-of-type(-n+3) .cell:nth-of-type(n+4):nth-of-type(-n+6):hover, .row:nth-of-type(n+7):nth-of-type(-n+9) .cell:nth-of-type(n+4):nth-of-type(-n+6):hover {
+      background-color: rgba(51, 51, 51, 0.5) !important; }
   .row:nth-of-type(n+4):nth-of-type(-n+6) .cell:nth-of-type(n+1):nth-of-type(-n+3), .row:nth-of-type(n+4):nth-of-type(-n+6) .cell:nth-of-type(n+7):nth-of-type(-n+9) {
-    background-color: #333; }
+    background-color: rgba(0, 0, 0, 0.5); }
+    .row:nth-of-type(n+4):nth-of-type(-n+6) .cell:nth-of-type(n+1):nth-of-type(-n+3):hover, .row:nth-of-type(n+4):nth-of-type(-n+6) .cell:nth-of-type(n+7):nth-of-type(-n+9):hover {
+      background-color: rgba(51, 51, 51, 0.5) !important; }
 
 .cell {
-  border: 1px solid #444;
-  font-weight: bold;
-  width: 40px;
-  height: 40px;
+  border: 1px solid #66c8ba;
+  width: 50px;
+  height: 50px;
   display: inline-block;
   overflow: hidden;
   margin: 0 auto;
   font-family: "Muli", sans-serif;
-  font-size: 24px;
-  line-height: 24px;
+  font-size: 30px;
+  line-height: 30px;
   text-align: center;
-  padding-top: 8px;
-  height: 40px;
-  width: 40px;
-  background-color: #888;
-  transition: 0.3s all ease-in-out; }
+  padding-top: 10px;
+  background-color: rgba(255, 255, 255, 0.4);
+  transition: 0.3s all ease-in-out;
+  -webkit-transition: 0.3s all ease-in-out; }
   .cell:hover {
-    background-color: #999 !important; }
+    background-color: rgba(204, 204, 204, 0.4) !important; }
   .cell.revealed {
     color: #FFF; }
   .cell.guessed {
     color: #66c8ba; }
   .cell.highlighted {
     background-color: #68c07a !important; }
+    .cell.highlighted:hover {
+      background-color: #8ccf9a !important; }
+    .cell.highlighted.guessed {
+      color: #276e64; }
   .cell.conflict {
     background-color: #eb5174 !important; }
+    .cell.conflict:hover {
+      background-color: #f07f99 !important; }
+    .cell.conflict.guessed {
+      color: #276e64; }
 
 #button-container {
-  margin: 15px auto 0;
-  width: 216px; }
+  margin: 25px 0 0 25px;
+  width: 300px;
+  display: inline-block;
+  vertical-align: top; }
   #button-container button {
-    width: 50px;
-    height: 50px;
-    margin: 2px;
-    background-color: #333;
+    width: 90px;
+    height: 90px;
+    margin: 5px;
+    background-color: #276e64;
     color: #FFF;
-    border: none;
-    font-size: 24px;
+    border: 5px solid transparent;
+    font-size: 30px;
     font-family: "Muli", sans-serif;
-    transition: 0.3s all ease-in-out; }
-    #button-container button.selected, #button-container button:focus {
-      border: 3px solid #68c07a;
-      background-color: #666;
+    transition: 0.3s all ease-in-out;
+    -webkit-transition: 0.3s all ease-in-out; }
+    #button-container button.selected {
+      border: 5px solid #9ed7aa;
+      transition: 0.3s all ease-in-out;
+      -webkit-transition: 0.3s all ease-in-out;
+      background-color: #8cd5cb; }
+      #button-container button.selected#conflict-button {
+        border: 5px solid #f396ab; }
+      #button-container button.selected#delete-button {
+        border: 5px solid #FFF; }
+    #button-container button:focus {
       outline: none; }
-    #button-container button:hover {
-      background-color: #666; }
-    #button-container button:active {
-      background-color: #666; }
+    #button-container button:hover, #button-container button:active {
+      background-color: #1a4841; }
+
+@media (max-width: 780px) {
+  #main-container {
+    display: block;
+    width: 100%; }
+
+  #board-container, #button-container {
+    display: block;
+    margin: 0 auto; }
+
+  #button-container {
+    margin-top: 25px; } }
