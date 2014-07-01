@@ -3,6 +3,7 @@ $cell-background-light: rgba(255,255,255,0.4);
 $cell-background-dark: rgba(0,0,0,0.5);
 $green: #68c07a;
 $red: #eb5174;
+$yellow: #e3c75f;
 
 *{
   box-sizing: border-box;
@@ -56,7 +57,7 @@ h1{
     .cell:nth-of-type(n+4):nth-of-type(-n+6){
       background-color: $cell-background-dark;
       &:hover{
-        background-color: lighten($cell-background-dark, 20%) !important;
+        background-color: lighten($cell-background-dark, 20%);
       }
     }
   }
@@ -64,7 +65,7 @@ h1{
     .cell:nth-of-type(n+1):nth-of-type(-n+3), .cell:nth-of-type(n+7):nth-of-type(-n+9){
       background-color: $cell-background-dark;
       &:hover{
-        background-color: lighten($cell-background-dark, 20%) !important;
+        background-color: lighten($cell-background-dark, 20%);
       }
     }
   }
@@ -86,7 +87,7 @@ h1{
   transition: 0.3s all ease-in-out;
   -webkit-transition: 0.3s all ease-in-out;
   &:hover{
-    background-color: darken($cell-background-light, 20%) !important;
+    background-color: darken($cell-background-light, 20%);
   }
   &.revealed{
     color: #FFF;
@@ -112,6 +113,12 @@ h1{
       color: darken($main-color, 30%);
     }
   }
+  &.incorrect{
+    background-color: $yellow;
+    &:hover{
+      background-color: lighten($yellow, 10%) !important;
+    }
+  }
 }
 
 #button-container{
@@ -135,8 +142,14 @@ h1{
       transition: 0.3s all ease-in-out;
       -webkit-transition: 0.3s all ease-in-out;
       background-color: lighten($main-color, 10%);
+      &:hover, &:active{
+        background-color: darken($main-color, 10%);
+      }
       &#conflict-button{
         border: 5px solid lighten($red, 15%);
+      }
+      &#answer-button{
+        border: 5px solid lighten($yellow, 15%);
       }
       &#delete-button{
         border: 5px solid #FFF;

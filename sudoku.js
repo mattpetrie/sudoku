@@ -34,6 +34,7 @@ var SHOWN = Sudoku.SHOWN = [
     this.selectedNumber = null;
     this.deleteMode = false;
     this.conflictMode = false;
+    this.answerMode = false;
   };
 
   Board.prototype.generateGrid = function(){
@@ -104,10 +105,14 @@ var SHOWN = Sudoku.SHOWN = [
   Board.prototype.updateCell = function(id, target){
     if(this.deleteMode){
       this.setCoord([id[0], id[1]], '');
-      $(target).html("").removeClass('highlighted');
+      $(target).html("").removeClass('highlighted').removeClass('incorrect');
     } else {
       this.setCoord([id[0], id[1]], this.selectedNumber);
       $(target).html(this.selectedNumber).addClass('highlighted');
+    }
+
+    if(this.answerMode){
+      this.flagWrongAnswers();
     }
 
     if(this.conflictMode){
@@ -189,6 +194,16 @@ var SHOWN = Sudoku.SHOWN = [
     });
   };
 
+  Board.prototype.flagWrongAnswers = function(){
+    var flatBoard = _.flatten(this.grid);
+    _.each(flatBoard, function(square){
+      if(square.curValue !== "" && square.curValue !== square.winningValue){
+        var pos = square.pos;
+        return $('div').find('[data-id="' + pos[0] + pos[1] + '"]').addClass('incorrect');
+      }
+    });
+  };
+
   Board.prototype.groups = function(){
     var groups = [];
     for(var i = 0; i <= 6; i += 3){
@@ -248,6 +263,15 @@ var SHOWN = Sudoku.SHOWN = [
     this.highlightCells();
   };
 
+  Board.prototype.toggleAnswerMode = function(){
+    this.answerMode ? this.answerMode = false : this.answerMode = true;
+    if(this.answerMode){
+      this.flagWrongAnswers();
+    } else {
+      $('div.cell').removeClass('incorrect');
+    }
+  };
+
   Board.prototype.toggleConflictMode = function(){
     this.conflictMode ? this.conflictMode = false : this.conflictMode = true;
     if(this.conflictMode){
@@ -285,6 +309,11 @@ $(document).ready(function(){
   $('button#conflict-button').click(function(event){
     $(event.target).toggleClass('selected');
     S.toggleConflictMode();
+  });
+
+  $('button#answer-button').click(function(event){
+    $(event.target).toggleClass('selected');
+    S.toggleAnswerMode();
   });
 
   $('button#delete-button').click(function(event){

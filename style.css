@@ -39,11 +39,11 @@ h1 {
   .row:nth-of-type(n+1):nth-of-type(-n+3) .cell:nth-of-type(n+4):nth-of-type(-n+6), .row:nth-of-type(n+7):nth-of-type(-n+9) .cell:nth-of-type(n+4):nth-of-type(-n+6) {
     background-color: rgba(0, 0, 0, 0.5); }
     .row:nth-of-type(n+1):nth-of-type(-n+3) .cell:nth-of-type(n+4):nth-of-type(-n+6):hover, .row:nth-of-type(n+7):nth-of-type(-n+9) .cell:nth-of-type(n+4):nth-of-type(-n+6):hover {
-      background-color: rgba(51, 51, 51, 0.5) !important; }
+      background-color: rgba(51, 51, 51, 0.5); }
   .row:nth-of-type(n+4):nth-of-type(-n+6) .cell:nth-of-type(n+1):nth-of-type(-n+3), .row:nth-of-type(n+4):nth-of-type(-n+6) .cell:nth-of-type(n+7):nth-of-type(-n+9) {
     background-color: rgba(0, 0, 0, 0.5); }
     .row:nth-of-type(n+4):nth-of-type(-n+6) .cell:nth-of-type(n+1):nth-of-type(-n+3):hover, .row:nth-of-type(n+4):nth-of-type(-n+6) .cell:nth-of-type(n+7):nth-of-type(-n+9):hover {
-      background-color: rgba(51, 51, 51, 0.5) !important; }
+      background-color: rgba(51, 51, 51, 0.5); }
 
 .cell {
   border: 1px solid #66c8ba;
@@ -61,7 +61,7 @@ h1 {
   transition: 0.3s all ease-in-out;
   -webkit-transition: 0.3s all ease-in-out; }
   .cell:hover {
-    background-color: rgba(204, 204, 204, 0.4) !important; }
+    background-color: rgba(204, 204, 204, 0.4); }
   .cell.revealed {
     color: #FFF; }
   .cell.guessed {
@@ -78,6 +78,10 @@ h1 {
       background-color: #f07f99 !important; }
     .cell.conflict.guessed {
       color: #276e64; }
+  .cell.incorrect {
+    background-color: #e3c75f; }
+    .cell.incorrect:hover {
+      background-color: #ebd68a !important; }
 
 #button-container {
   margin: 25px 0 0 25px;
@@ -100,8 +104,12 @@ h1 {
       transition: 0.3s all ease-in-out;
       -webkit-transition: 0.3s all ease-in-out;
       background-color: #8cd5cb; }
+      #button-container button.selected:hover, #button-container button.selected:active {
+        background-color: #42b9a8; }
       #button-container button.selected#conflict-button {
         border: 5px solid #f396ab; }
+      #button-container button.selected#answer-button {
+        border: 5px solid #eedea0; }
       #button-container button.selected#delete-button {
         border: 5px solid #FFF; }
     #button-container button:focus {
