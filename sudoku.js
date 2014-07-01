@@ -65,11 +65,11 @@ var SHOWN = Sudoku.SHOWN = [
       $(el).append('<div class="row"></div>');
       var row = $(el).find('.row').last();
       for(var j = 0; j < 9; j++){
-        row.append('<div class="cell" data-id="' + i + j + '"></div>');
+        row.append('<div class="cell" data-id="' + i + j + '"><div class="cell-inner"></div></div>');
         var square = this.grid[i][j];
         var cell = $('div').find('[data-id="' + i + j + '"]');
         if(square.revealed){
-          cell.append(square.curValue).addClass('revealed');
+          cell.addClass('revealed').find('.cell-inner').append(square.curValue);
         } else{
           cell.addClass('guessed').prepend('<div class="notes"></div>');
         }
@@ -102,13 +102,15 @@ var SHOWN = Sudoku.SHOWN = [
   Board.prototype.updateCell = function(id, target){
     if(this.deleteMode){
       this.setCoord([id[0], id[1]], '');
-      $(target).html("")
+      $(target).html("").parent()
         .removeClass('highlighted')
         .removeClass('incorrect')
         .prepend('<div class="notes"></div');
     } else if(this.selectedNumber){
       this.setCoord([id[0], id[1]], this.selectedNumber);
-      $(target).html(this.selectedNumber).addClass('highlighted');
+      $(target).html(this.selectedNumber)
+        .parent().addClass('highlighted')
+        .find('.notes').remove();
     }
 
     if(this.answerMode){
@@ -129,7 +131,7 @@ var SHOWN = Sudoku.SHOWN = [
     for(var i = 0; i < this.grid.length; i++){
       for(var j = 0; j < this.grid[i].length; j++){
         if(this.grid[i][j].curValue === this.selectedNumber){
-          $('div').find('[data-id="' + i + j + '"]').addClass('highlighted');
+          $('#board-container').find('[data-id="' + i + j + '"]').addClass('highlighted');
         }
       }
     }
@@ -190,7 +192,7 @@ var SHOWN = Sudoku.SHOWN = [
       }
     });
     _.each(conflicts, function(conflict){
-      return $('div').find('[data-id="' + conflict[0] + conflict[1] + '"]').addClass('conflict');
+      return $('#board-container').find('[data-id="' + conflict[0] + conflict[1] + '"]').addClass('conflict');
     });
   };
 
@@ -199,7 +201,7 @@ var SHOWN = Sudoku.SHOWN = [
     _.each(flatBoard, function(square){
       if(square.curValue !== "" && square.curValue !== square.winningValue){
         var pos = square.pos;
-        return $('div').find('[data-id="' + pos[0] + pos[1] + '"]').removeClass('highlighted').addClass('incorrect');
+        return $('#board-container').find('[data-id="' + pos[0] + pos[1] + '"]').removeClass('highlighted').addClass('incorrect');
       }
     });
   };
@@ -256,10 +258,10 @@ var SHOWN = Sudoku.SHOWN = [
   };
 
   Board.prototype.selectButton = function(target){
-    this.selectedNumber = parseInt($(target).val());
     if(this.deleteMode){
       this.toggleDeleteMode();
     }
+    this.selectedNumber = parseInt($(target).val());
     this.highlightCells();
   };
 
@@ -269,6 +271,7 @@ var SHOWN = Sudoku.SHOWN = [
       this.flagWrongAnswers();
     } else {
       $('div.cell').removeClass('incorrect');
+      this.highlightCells();
     }
   };
 
@@ -289,14 +292,17 @@ var SHOWN = Sudoku.SHOWN = [
   Board.prototype.toggleNoteMode = function(){
     if(this.noteMode){
       this.noteMode = false;
-      $('.notes').css('z-index', '-2');
+      $('.notes').removeClass('forward');
     } else {
       this.noteMode = true
-      $('.notes').css('z-index', '2');
+      $('.notes').addClass('forward');
     }
   };
 
   Board.prototype.addNote = function(id, target){
+    if(!this.selectedNumber){
+      return;
+    }
     var square = this.grid[id[0]][id[1]];
     if(square.notes[this.selectedNumber]){
       delete square.notes[this.selectedNumber]
@@ -347,11 +353,13 @@ $(document).ready(function(){
   $('button#delete-button').click(function(event){
     $(event.target).toggleClass('selected');
     $('button.number-button').removeClass('selected');
+    $('button#notes-button').removeClass('selected');
+    S.noteMode = false;
     S.toggleDeleteMode();
   });
 
-  $('#board-container').delegate('div.guessed', 'click', function(event){
-    var id = $(event.target).data('id').toString();
+  $('#board-container').delegate('div.guessed div.cell-inner', 'click', function(event){
+    var id = $(event.target).parent().data('id').toString();
     S.updateCell(id, event.target);
   }).delegate('div.notes', 'click', function(event){
       event.stopPropagation();
