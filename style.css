@@ -89,6 +89,7 @@ h1 {
   display: inline-block;
   vertical-align: top; }
   #button-container button {
+    position: relative;
     width: 90px;
     height: 90px;
     margin: 5px;
@@ -127,9 +128,50 @@ h1 {
     margin: 0 auto; }
 
   #button-container {
-    margin-top: -30px;
-    transform: rotateX(180deg) rotateZ(270deg);
-    -webkit-transform: rotateX(180deg) rotateZ(270deg); }
+    margin: 10px auto 0;
+    width: 400px; }
+    #button-container .button-row {
+      position: relative;
+      float: left; }
+
+  #special-buttons {
+    position: relative;
+    float: right;
+    margin-top: -200px;
+    height: 300px;
+    width: 100px; } }
+@media (max-width: 449px) {
+  header {
+    padding: 10px;
+    margin-bottom: 5px; }
+
+  h1 {
+    font-size: 24px; }
+
+  #board-container {
+    width: 315px;
+    height: 315px; }
+
+  .row {
+    height: 35px; }
+
+  .cell {
+    padding-top: 2px;
+    font-size: 24px;
+    height: 35px;
+    width: 35px; }
+
+  #button-container {
+    width: 240px;
+    height: 180px; }
     #button-container button {
-      transform: rotateZ(270deg) rotateY(180deg);
-      -webkit-transform: rotateZ(270deg) rotateY(180deg); } }
+      width: 50px;
+      height: 50px; }
+    #button-container:after {
+      content: "";
+      clear: both; }
+
+  #special-buttons {
+    margin-top: -120px;
+    height: 180px;
+    width: 60px; } }
