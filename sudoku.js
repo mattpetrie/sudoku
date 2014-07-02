@@ -46,6 +46,7 @@
   };
 
   Board.prototype.flagWrongAnswers = function(){
+    $('.incorrect').removeClass('incorrect');
     var flatBoard = _.flatten(this.grid);
     _.each(flatBoard, function(square){
       if(square.curValue !== "" && square.curValue !== square.winningValue){
