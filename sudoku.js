@@ -204,7 +204,7 @@
   };
 
   Board.prototype.won = function(){
-    return this.full() && this.checkRows() && this.checkColumns() && this.checkGroups();
+    return this.full() && this._checkRows() && this._checkColumns() && this._checkGroups();
   };
 
   Board.prototype._check = function(array){
