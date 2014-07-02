@@ -219,16 +219,16 @@
   };
 
   Board.prototype._checkRows = function(){
-    return this.check(this.grid);
+    return this._check(this.grid);
   };
 
   Board.prototype._checkColumns = function(){
     var transposedGrid = _.zip.apply(_, this.grid);
-    return this.check(transposedGrid);
+    return this._check(transposedGrid);
   };
 
   Board.prototype._checkGroups = function(){
-    return this.check(this.groups());
+    return this._check(this.groups());
   };
 
   Board.prototype._findRowConflicts = function(){
