@@ -247,9 +247,8 @@ h1{
   }
 }
 
-@media (max-width: 780px) {
+@media (max-width: 780px) and (orientation: portrait) {
   #main-container{
-    display: block;
     width: 100%
   }
   #board-container, #button-container{
@@ -282,7 +281,62 @@ h1{
   }
 }
 
-@media (max-width: 449px){
+@media (max-width: 780px) and (orientation: landscape) {
+  header{
+    padding: 3px;
+    margin-bottom: 5px; 
+  }
+
+  h1{
+    font-size: 24px;
+  }
+
+  #main-container{
+    width: 100%
+  }
+
+  #board-container{
+    margin-left: 10%;
+    width: 315px;
+    height: 315px;
+  }
+
+  .row{
+    height: 35px;
+  }
+
+  .cell{
+    font-size: 24px;
+    height: 35px;
+    width: 35px;
+  }
+
+  .cell-inner{
+    padding-top: 2px;
+  }
+
+  .notes{
+    font-size: 10px;
+    line-height: 10px;
+  }
+
+  #button-container{
+    margin-top: 20px;
+    width: 144px;
+    height: 192px;
+    button{
+      margin: 2px;
+      width: 44px;
+      height: 44px;
+    }
+    button#notes-button{
+      width: 140px;
+      height: 40px;
+    }
+  }
+}
+
+@media (max-width: 449px) {
   header{
     padding: 10px;
     margin-bottom: 5px; 
