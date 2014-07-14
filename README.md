@@ -1,9 +1,9 @@
 Sudoku
 =======
 
-An implementation of Sudoku using JavaScript, jQuery, Underscore.js, and Sass. I wanted to create a version of the game, with a pleasant, modern-feeling flat UI, that waseasy to use in both the browser and on a mobile device.
+An implementation of Sudoku using JavaScript, jQuery, Underscore.js, and Sass. I wanted to create a version of the game, with a pleasant, modern-feeling flat UI, that was easy to use in both the browser and on a mobile device.
 
-Users select a puzzle difficulty from the initial menu to start a game. Once the game is started, the user can use the button menu on the left side of the board to select a number, and then click on squares on the board to fill them in with that number. Existing squares containing the selected number are also highlighted, making it easier to see where to avoid placing the current number.
+Users select a puzzle difficulty from the initial menu to start a game. Once the game is started, the user can use the button menu on the right side of the board to select a number, and then click on squares on the board to fill them in with that number. Existing squares containing the selected number are also highlighted, making it easier to see where to avoid placing the current number.
 
 Clicking on the pencil button at the top of the menu actives Note Mode. While in Note Mode, clicking on a board square adds the number to the box as a note, rather than filling in the square. This way the user can keep track of possible guesses for any square. The user can add as many numbers as they want to the note. Clicking on an existing note with the same number will remove that number from the note.
 

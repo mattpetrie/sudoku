@@ -26,6 +26,17 @@
     $(target).html(Object.keys(square.notes).join(' '));
   };
 
+  Board.prototype.deleteContents = function(id, target){
+    this.setCoord([id[0], id[1]], '');
+    $(target).html("");
+    var $parent = $(target).parent();
+    $parent.removeClass('highlighted')
+      .removeClass('incorrect');
+    if($parent.find('div.notes').length === 0){
+      $parent.prepend('<div class="notes"></div');
+    }
+  };
+
   Board.prototype.findConflicts = function(){
     $('.conflict').removeClass('conflict');
     this._findRowConflicts();
@@ -129,6 +140,7 @@
   Board.prototype.setCoord = function(arr, val){
     if(typeof this.grid[arr[0]][arr[1]] == "object"){
       this.grid[arr[0]][arr[1]].curValue = val;
+      this.grid[arr[0]][arr[1]].notes = {}
     } else {
       this.grid[arr[0]][arr[1]] = val;
     }
@@ -179,11 +191,7 @@
 
   Board.prototype.updateCell = function(id, target){
     if(this.deleteMode){
-      this.setCoord([id[0], id[1]], '');
-      $(target).html("").parent()
-        .removeClass('highlighted')
-        .removeClass('incorrect')
-        .prepend('<div class="notes"></div');
+      this.deleteContents(id, target);
     } else if(this.selectedNumber){
       this.setCoord([id[0], id[1]], this.selectedNumber);
       $(target).html(this.selectedNumber)
