@@ -1,8 +1,6 @@
 (function(){
   var Sudoku = this.Sudoku = (this.Sudoku || {});
 
-  var DIGITS = Sudoku.DIGITS = "123456789";
-
   var Board = Sudoku.Board = function(difficulty){
     this.grid = this._generateGrid();
     this.populate(difficulty);
