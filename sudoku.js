@@ -31,7 +31,7 @@
     $parent.removeClass('highlighted')
       .removeClass('incorrect');
     if($parent.find('div.notes').length === 0){
-      $parent.prepend('<div class="notes"></div');
+      $parent.prepend('<div class="notes"></div>');
     }
   };
 
@@ -306,42 +306,42 @@ $(document).ready(function(){
     S.render($el);
   });
 
-  $('button#notes-button').click(function(event){
+  $('#notes-button').click(function(event){
     $(event.target).toggleClass('selected');
-    $('button#delete-button').removeClass('selected');
+    $('#delete-button').removeClass('selected');
     S.toggleNoteMode();
   });
 
-  $('button.number-button').click(function(event){
+  $('.number-button').click(function(event){
     S.selectButton(event.target);
-    $('button.number-button').removeClass('selected');
-    $('button#delete-button').removeClass('selected');
+    $('.number-button').removeClass('selected');
+    $('#delete-button').removeClass('selected');
     $(event.target).addClass('selected');
   });
 
-  $('button#conflict-button').click(function(event){
+  $('#conflict-button').click(function(event){
     $(event.target).toggleClass('selected');
     S.toggleConflictMode();
   });
 
-  $('button#answer-button').click(function(event){
+  $('#answer-button').click(function(event){
     $(event.target).toggleClass('selected');
     S.toggleAnswerMode();
   });
 
-  $('button#delete-button').click(function(event){
+  $('#delete-button').click(function(event){
     $(event.target).toggleClass('selected');
-    $('button.number-button').removeClass('selected');
-    $('button#notes-button').removeClass('selected');
+    $('.number-button').removeClass('selected');
+    $('#notes-button').removeClass('selected');
     S.noteMode = false;
     $('.notes').removeClass('forward');
     S.toggleDeleteMode();
   });
 
-  $('#board-container').delegate('div.guessed div.cell-inner', 'click', function(event){
+  $('#board-container').on('click', 'div.guessed div.cell-inner', function(event){
     var id = $(event.target).parent().data('id').toString();
     S.updateCell(id, event.target);
-  }).delegate('div.notes', 'click', function(event){
+  }).on('click', 'div.notes', function(event){
       event.stopPropagation();
       var id = $(event.target).parent().data('id').toString();
       S.addNote(id, event.target);
